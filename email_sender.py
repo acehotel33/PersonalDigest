@@ -2,12 +2,17 @@ import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from news_fetcher import fetch_finance_news
-
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 def send_news_email(from_email, to_email, subject, news_articles, sendgrid_api_key):
-    content = "<h1>Finance News Digest</h1>"
-    for article in news_articles:
-        content += f"<p><a href='{article['url']}'>{article['title']}</a></p>"
+    # Set up Jinja2 environment
+    env = Environment(
+        loader=FileSystemLoader(searchpath="./templates"),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+    
+    template = env.get_template('email_template.html')
+    content = template.render(articles=news_articles)  # Render the template with the articles
     
     message = Mail(
         from_email=from_email,
@@ -25,10 +30,13 @@ def send_news_email(from_email, to_email, subject, news_articles, sendgrid_api_k
     except Exception as e:
         print(str(e))
 
-# Example usage
-sg_api_key=os.environ.get('SENDGRID_API_KEY')
-# from_email = 'lomvax@gmail.com'  # Replace with your email
-# to_email = 'lomvax@gmail.com'  # Replace with recipient's email
-# subject = 'Your Daily Digest'
-# finance_news = fetch_finance_news('fbf80615340a45e7a220852034904417')
-# send_news_email(from_email, to_email, subject, finance_news, sg_api_key)
+# Example usage setup
+if __name__ == '__main__':
+    sg_api_key = os.environ.get('SENDGRID_API_KEY')
+    news_api_key = os.environ.get('NEWS_API_KEY')
+    from_email = os.environ.get('FROM_EMAIL')  # Use environment variable for sender email
+    to_email = os.environ.get('TO_EMAIL')  # Use environment variable for recipient email
+    subject = 'Your Daily Finance Digest'
+    my_keywords = "fintech, stock market, economy, Tbilisi, Georgia, global finance, macroeconomics, microeconomics"
+    finance_news = fetch_finance_news(news_api_key)
+    send_news_email(from_email, to_email, subject, finance_news, sg_api_key)
