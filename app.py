@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from news_fetcher import fetch_finance_news
 import json
 import os
 
@@ -32,6 +33,16 @@ def save_user_preferences():
         json.dump(existing_data, json_file, indent=4)  # Added indent for readability
     
     return jsonify({"message": "Preferences saved successfully"}), 200
+
+@app.route('/fetch-finance-news')
+def display_finance_news():
+    api_key = 'fbf80615340a45e7a220852034904417'
+    finance_news = fetch_finance_news(api_key)
+    # For simplicity, we'll just return the titles of the news articles as a JSON response
+    news_titles = [article['title'] for article in finance_news]
+    return jsonify(news_titles)
+
+
 
 @app.route('/api/fetch-content', methods=['GET'])
 def fetch_content():
