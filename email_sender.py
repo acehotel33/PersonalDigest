@@ -33,10 +33,9 @@ def send_news_email(from_email, to_email, subject, news_articles, sendgrid_api_k
 # Example usage setup
 if __name__ == '__main__':
     sg_api_key = os.environ.get('SENDGRID_API_KEY')
-    news_api_key = os.environ.get('NEWS_API_KEY')
+    news_api_key = os.environ.get('GNEWS_API_KEY')
     from_email = os.environ.get('FROM_EMAIL')  # Use environment variable for sender email
     to_email = os.environ.get('TO_EMAIL')  # Use environment variable for recipient email
     subject = 'Your Daily Finance Digest'
-    my_keywords = "fintech, stock market, economy, Tbilisi, Georgia, global finance, macroeconomics, microeconomics"
     finance_news = fetch_finance_news(news_api_key)
     send_news_email(from_email, to_email, subject, finance_news, sg_api_key)
