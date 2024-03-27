@@ -2,7 +2,7 @@ import requests
 from datetime import datetime, timedelta
 import os
 
-def fetch_finance_news(api_key, keywords="finance OR economy OR tbilisi OR tech OR stock market", category="general,business,technology,world,science",language="en", country="us"):
+def fetch_finance_news(api_key, keywords="finance OR economy OR tbilisi OR tech OR stock market", category="business,technology,world,science",language="en", country="us"):
     # Calculate the date range for the last 12 hours
     to_date = datetime.utcnow()
     from_date = to_date - timedelta(hours=12)
