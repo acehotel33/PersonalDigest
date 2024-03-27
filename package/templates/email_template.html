@@ -14,10 +14,16 @@
         .container {
             max-width: 600px;
             margin: auto;
-            background-color: #fff;
+            background-color: rgb(242, 242, 242);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .date {
+            text-align: left;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 22px;
         }
         .weather {
             display: flex;
@@ -28,6 +34,7 @@
             padding: 20px;
             border-radius: 10px;
             margin-top: 20px;
+            margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
@@ -41,15 +48,15 @@
         }
 
         .weather-details div {
-            margin-bottom: 8px; /* Space between weather details */
+            margin-bottom: 4px; /* Space between weather details */
         }
 
         .weather-icon {
-            text-align: center;
+            text-align: right;
         }
 
         .weather-icon img {
-            width: auto; /* Adjust as needed */
+            width: 80px; /* Adjust as needed */
             height: auto;
             margin-bottom: 2px;
         }
@@ -100,11 +107,36 @@
         h1 {
             color: #333;
         }
+
+        .nasa-pic {
+            align-items: center;
+            max-width: 100%; /* Adjust the width as needed */
+            height: auto;
+        }
+
+        .nasa-title {
+            text-align: center;
+            /* margin-bottom: 20px; */
+            color: #666;
+            font-size: 22px;
+        }
+
+        .nasa-description{
+            text-align: center;
+            /* margin-bottom: 20px; */
+            color: #666;
+            font-size: 14px;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
+
+        <div class="date">{{ today_date }}</div>
+
         <h1>Weather in {{ weather.city }}</h1>
+
         <div class="weather">
             <div class="weather-details">
                 <div><strong>Condition:</strong> {{ weather.condition }}</div>
@@ -131,6 +163,14 @@
                 </div>
             </div>
         {% endfor %}
+        
+        <h1>NASA Picture of the Day</h1>
+        <div class="nasa">
+            <img src="{{ nasa_pic.url }}" alt="NASA Pic" class="nasa-pic">
+            <div class="nasa-title">{{ nasa_pic.title }}</div>
+            <div class="nasa-description">{{ nasa_pic.description }}</div>
+        </div>
+
     </div>
 </body>
 </html>
