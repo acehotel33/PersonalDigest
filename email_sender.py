@@ -3,9 +3,10 @@ import json
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from news_fetcher import fetch_finance_news
+from weather_fetcher import fetch_weather
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-def send_news_email(from_email, to_email, subject, news_articles, sendgrid_api_key):
+def send_news_email(from_email, to_email, subject, news_articles, weather, sendgrid_api_key):
     # Set up Jinja2 environment
     env = Environment(
         loader=FileSystemLoader(searchpath="./templates"),
@@ -13,7 +14,7 @@ def send_news_email(from_email, to_email, subject, news_articles, sendgrid_api_k
     )
     
     template = env.get_template('email_template.html')
-    content = template.render(articles=news_articles)  # Render the template with the articles
+    content = template.render(weather=weather,articles=news_articles)  # Render the template with the articles
     
     message = Mail(
         from_email=from_email,
@@ -32,20 +33,22 @@ def send_news_email(from_email, to_email, subject, news_articles, sendgrid_api_k
         print(str(e))
 
 # below is lambda handler for AWS deployment
-#  should be deleted if run locally
+#  should be omitted if run locally
 
 def lambda_handler(event, context):
     # Extract environment variables inside your handler
     sg_api_key = os.environ.get('SENDGRID_API_KEY')
     news_api_key = os.environ.get('GNEWS_API_KEY')
+    weather_api_key = os.environ.get('WEATHER_API_KEY')
     from_email = os.environ.get('FROM_EMAIL')
     to_email = os.environ.get('TO_EMAIL')
     
-    # Fetch finance news
+    # Fetch finance news, weather
     finance_news = fetch_finance_news(news_api_key)
-    
+    weather = fetch_weather(weather_api_key)
+
     # Send the email
-    send_news_email(from_email, to_email, 'Your Daily Finance Digest', finance_news, sg_api_key)
+    send_news_email(from_email, to_email, 'Your Daily Digest', finance_news, weather, sg_api_key)
     
     return {
         'statusCode': 200,
@@ -63,8 +66,10 @@ def lambda_handler(event, context):
 # if __name__ == '__main__':
 #     sg_api_key = os.environ.get('SENDGRID_API_KEY')
 #     news_api_key = os.environ.get('GNEWS_API_KEY')
+#     weather_api_key = os.environ.get('WEATHER_API_KEY')
 #     from_email = os.environ.get('FROM_EMAIL')  # Use environment variable for sender email
 #     to_email = os.environ.get('TO_EMAIL')  # Use environment variable for recipient email
 #     subject = 'Your Daily Finance Digest'
 #     finance_news = fetch_finance_news(news_api_key)
-#     send_news_email(from_email, to_email, subject, finance_news, sg_api_key)
+#     weather = fetch_weather(weather_api_key)
+#     send_news_email(from_email, to_email, subject, finance_news, weather, sg_api_key)

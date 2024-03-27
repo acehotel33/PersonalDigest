@@ -36,7 +36,7 @@ def fetch_finance_news(api_key, keywords="finance OR economy OR tbilisi OR tech 
 
     return []
 
-# Example usage
-if __name__ == '__main__':
-    gnews_api_key = os.environ.get('GNEWS_API_KEY')  # Ensure this environment variable is correctly set
-    finance_news = fetch_finance_news(gnews_api_key)
+# # Example usage
+# if __name__ == '__main__':
+#     gnews_api_key = os.environ.get('GNEWS_API_KEY')  # Ensure this environment variable is correctly set
+#     finance_news = fetch_finance_news(gnews_api_key)

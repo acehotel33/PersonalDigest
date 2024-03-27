@@ -1,15 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Digest</title>
     <style>
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
         }
         .container {
             max-width: 600px;
             margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
+        .weather {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff; /* A pleasant blue background */
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .weather h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .weather-details {
+            font-size: 16px; /* Slightly larger font for readability */
+        }
+
+        .weather-details div {
+            margin-bottom: 8px; /* Space between weather details */
+        }
+
+        .weather-icon {
+            text-align: center;
+        }
+
+        .weather-icon img {
+            width: auto; /* Adjust as needed */
+            height: auto;
+            margin-bottom: 2px;
+        }
+
+        .weather-icon div {
+            font-size: 20px; /* Larger font for temperature */
+            font-weight: bold;
+        }
+
+        /* Additional style for strong tags to highlight labels */
+
+
         .article {
             margin-bottom: 20px;
             padding: 10px;
@@ -52,18 +104,44 @@
 </head>
 <body>
     <div class="container">
+        <h1>Weather in {{ weather.city }}</h1>
+        <div class="weather">
+            <div class="weather-details">
+                <div><strong>Condition:</strong> {{ weather.condition }}</div>
+                <div><strong>Cloudiness:</strong> {{ weather.cloud }}%</div>
+                <div><strong>Chance of Rain:</strong> {{ weather.rain }}%</div>
+                <div><strong>Precipitation:</strong> {{ weather.precipitation }}mm</div>
+                <div><strong>High/Low:</strong> {{ weather.high }}°C / {{ weather.low }}°C</div>
+            </div>
+            <div class="weather-icon">
+                <img src="{{ weather.icon }}" alt="Weather icon">
+                <div>{{ weather.temperature }}°C</div>
+            </div>
+        </div>
+        
         <h1>Finance News Digest</h1>
         {% for article in articles %}
-        <div class="article">
-            <img src="{{ article['image'] }}" alt="Article Image" class="article-image">
-            <div>
-                <div class="article-title">{{ article['title'] }}</div>
-                <div class="article-summary">{{ article['description'] | default('Read more...') }}</div>
-                <div class="source-name">Source: {{ article['source']['name'] }}</div>
+            <div class="article">
+                <img src="{{ article['image'] }}" alt="Article Image" class="article-image">
+                <div>
+                    <div class="article-title">{{ article['title'] }}</div>
+                    <div class="article-summary">{{ article['description'] | default('Read more...') }}</div>
+                    <div class="source-name">Source: {{ article['source']['name'] }}</div>
+                    <a href="{{ article['url'] }}" class="read-more" target="_blank">Read More</a>
+                </div>
             </div>
-            <a href="{{ article['url'] }}" class="read-more" target="_blank">Read More</a>
-        </div>
         {% endfor %}
     </div>
 </body>
 </html>
+
+
+
+
+
+<!-- 
+
+} -->
+
+<!-- 3f9cff
+ -->
