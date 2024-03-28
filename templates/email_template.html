@@ -19,6 +19,12 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
+
+        .category {
+            margin-bottom: 25px;
+            /* border-bottom: 1px solid rgb(207, 207, 207); */
+        }
+
         .date {
             text-align: left;
             margin-bottom: 20px;
@@ -68,11 +74,21 @@
 
         /* Additional style for strong tags to highlight labels */
 
+        .calendar {
+            margin-bottom: 20px;
+        }
 
+        .calendar div {
+            font-size: 18px;
+        }
+
+        .finance-news {
+            margin-bottom: 20px;
+        }
         .article {
             margin-bottom: 20px;
             padding: 10px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgb(217, 217, 217);
             overflow: auto; /* Ensure that the container expands to hold floated elements */
         }
         .article-image {
@@ -108,6 +124,10 @@
             color: #333;
         }
 
+        .nasa {
+            margin-bottom: 20px;
+        }
+
         .nasa-pic {
             align-items: center;
             max-width: 100%; /* Adjust the width as needed */
@@ -116,7 +136,7 @@
 
         .nasa-title {
             text-align: center;
-            /* margin-bottom: 20px; */
+            margin-bottom: 15px;
             color: #666;
             font-size: 22px;
         }
@@ -133,42 +153,71 @@
 <body>
     <div class="container">
 
-        <div class="date">{{ today_date }}</div>
+        <div class="category">
+            <div class="date">{{ today_date }}</div>
 
-        <h1>Weather in {{ weather.city }}</h1>
+            <h1>Weather in {{ weather.city }}</h1>
 
-        <div class="weather">
-            <div class="weather-details">
-                <div><strong>Condition:</strong> {{ weather.condition }}</div>
-                <div><strong>Cloudiness:</strong> {{ weather.cloud }}%</div>
-                <div><strong>Chance of Rain:</strong> {{ weather.rain }}%</div>
-                <div><strong>Precipitation:</strong> {{ weather.precipitation }}mm</div>
-                <div><strong>High/Low:</strong> {{ weather.high }}°C / {{ weather.low }}°C</div>
-            </div>
-            <div class="weather-icon">
-                <img src="{{ weather.icon }}" alt="Weather icon">
-                <div>{{ weather.temperature }}°C</div>
-            </div>
-        </div>
-        
-        <h1>Finance News Digest</h1>
-        {% for article in articles %}
-            <div class="article">
-                <img src="{{ article['image'] }}" alt="Article Image" class="article-image">
-                <div>
-                    <div class="article-title">{{ article['title'] }}</div>
-                    <div class="article-summary">{{ article['description'] | default('Read more...') }}</div>
-                    <div class="source-name">Source: {{ article['source']['name'] }}</div>
-                    <a href="{{ article['url'] }}" class="read-more" target="_blank">Read More</a>
+            <div class="weather">
+                <div class="weather-details">
+                    <div><strong>Condition:</strong> {{ weather.condition }}</div>
+                    <div><strong>Cloudiness:</strong> {{ weather.cloud }}%</div>
+                    <div><strong>Chance of Rain:</strong> {{ weather.rain }}%</div>
+                    <div><strong>Precipitation:</strong> {{ weather.precipitation }}mm</div>
+                    <div><strong>High/Low:</strong> {{ weather.high }}°C / {{ weather.low }}°C</div>
+                </div>
+                <div class="weather-icon">
+                    <img src="{{ weather.icon }}" alt="Weather icon">
+                    <div>{{ weather.temperature }}°C</div>
                 </div>
             </div>
-        {% endfor %}
-        
-        <h1>NASA Pic of the Day</h1>
-        <div class="nasa">
-            <img src="{{ nasa_pic.url }}" alt="NASA Pic" class="nasa-pic">
-            <div class="nasa-title">{{ nasa_pic.title }}</div>
-            <div class="nasa-description">{{ nasa_pic.description }}</div>
+        </div>
+
+        <div class="category">
+            <div class="calendar">
+                <!-- Today's Events -->
+                    <h1>Today's Events</h1>
+                    <div>
+                        {% for event in calendar_events.today %}
+                            <div><strong>{{ event.start_time }}:</strong> {{ event.event }}</div>
+                        {% endfor %}
+                    </div>
+
+                <!-- Tomorrow's Events -->
+                    <h2>Tomorrow's Events</h2>
+                    <div>
+                        {% for event in calendar_events.tomorrow %}
+                            <div><strong>{{ event.start_time }}:</strong> {{ event.event }}</div>
+                        {% endfor %}
+                    </div>
+            </div>
+        </div>    
+
+        <div class="category">  
+            <div class="finance-news">
+                <h1>Finance News Digest</h1>
+                {% for article in articles %}
+                    <div class="article">
+                        <img src="{{ article['image'] }}" alt="Article Image" class="article-image">
+                        <div>
+                            <div class="article-title">{{ article['title'] }}</div>
+                            <div class="article-summary">{{ article['description'] | default('Read more...') }}</div>
+                            <div class="source-name">Source: {{ article['source']['name'] }}</div>
+                            <a href="{{ article['url'] }}" class="read-more" target="_blank">Read More</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="category">
+            <div class="nasa">
+                <h1>NASA Pic of the Day</h1>
+
+                    <img src="{{ nasa_pic.url }}" alt="NASA Pic" class="nasa-pic">
+                    <div class="nasa-title">{{ nasa_pic.title }}</div>
+                    <div class="nasa-description">{{ nasa_pic.description }}</div>
+            </div>
         </div>
 
     </div>

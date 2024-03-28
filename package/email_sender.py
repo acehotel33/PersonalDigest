@@ -64,8 +64,8 @@ def lambda_handler(event, context):
 
 
 # If you plan to still run this script directly for testing purposes, you can include this
-if __name__ == "__main__":
-    lambda_handler(None, None)
+# if __name__ == "__main__":
+#     lambda_handler(None, None)
 
 # -- Old below
 

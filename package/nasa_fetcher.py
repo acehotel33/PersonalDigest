@@ -19,9 +19,9 @@ def fetch_nasa_pic(api_key):
         return None
 
 
-if __name__ == '__main__':
-    nasa_api_key = os.getenv('NASA_API_KEY')
-    nasa_pic = fetch_nasa_pic(nasa_api_key)
+# if __name__ == '__main__':
+#     nasa_api_key = os.getenv('NASA_API_KEY')
+#     nasa_pic = fetch_nasa_pic(nasa_api_key)
 
 
 # {"copyright":"\nJoe Hua\n",

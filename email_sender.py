@@ -5,13 +5,14 @@ from sendgrid.helpers.mail import Mail
 from news_fetcher import fetch_finance_news
 from weather_fetcher import fetch_weather
 from nasa_fetcher import fetch_nasa_pic
+from google_calendar_fetcher import fetch_calendar_events
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from datetime import datetime
 
 # Format today's date
 today_date = datetime.now().strftime("%A, %B %d, %Y")
 
-def send_news_email(from_email, to_email, subject, news_articles, weather, nasa_pic, sendgrid_api_key):
+def send_news_email(from_email, to_email, subject, news_articles, weather, nasa_pic, calendar_events, sendgrid_api_key):
     # Set up Jinja2 environment
     env = Environment(
         loader=FileSystemLoader(searchpath="./templates"),
@@ -19,7 +20,8 @@ def send_news_email(from_email, to_email, subject, news_articles, weather, nasa_
     )
     
     template = env.get_template('email_template.html')
-    content = template.render(today_date=today_date, weather=weather,articles=news_articles, nasa_pic=nasa_pic)  # Render the template with the articles
+    
+    content = template.render(today_date=today_date, weather=weather, articles=news_articles, nasa_pic=nasa_pic, calendar_events=calendar_events)
     
     message = Mail(
         from_email=from_email,
@@ -49,13 +51,16 @@ def lambda_handler(event, context):
     from_email = os.environ.get('FROM_EMAIL')
     to_email = os.environ.get('TO_EMAIL')
     
-    # Fetch finance news, weather
+    # Fetch finance news, weather, nasa pic
     finance_news = fetch_finance_news(news_api_key)
     weather = fetch_weather(weather_api_key)
     nasa_pic = fetch_nasa_pic(nasa_api_key)
 
+    # Fetch Google Calendar events for today and tomorrow
+    calendar_events = fetch_calendar_events()
+
     # Send the email
-    send_news_email(from_email, to_email, 'Your Daily Digest', finance_news, weather, nasa_pic, sg_api_key)
+    send_news_email(from_email, to_email, 'Your Daily Digest', finance_news, weather, nasa_pic, calendar_events, sg_api_key)
     
     return {
         'statusCode': 200,
