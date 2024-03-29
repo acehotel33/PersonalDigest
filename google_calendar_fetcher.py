@@ -2,15 +2,41 @@ import datetime
 from dateutil import tz
 import os
 from zoneinfo import ZoneInfo
+from google.oauth2 import service_account
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
+import json
+import boto3
 
 # SCOPES specifies the access your application has to the user's data
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
+
+def get_secret():
+    secret_name = "gcloud_service_key"
+    region_name = "eu-north-1"
+
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    get_secret_value_response = client.get_secret_value(SecretId=secret_name)
+    secret = get_secret_value_response['SecretString']
+    return json.loads(secret)
+
+
+
+
 def fetch_calendar_events():
+    # --- For accessing gcloud_service_key via AWS Secrets ---
+    # secret = get_secret()
+    # creds = service_account.Credentials.from_service_account_info(secret)
+
+    # ------- For accessing gcloud_client_secret locally -------
     creds = None
     # The file token.json stores the user's access and refresh tokens.
     if os.path.exists('token.json'):
@@ -26,6 +52,7 @@ def fetch_calendar_events():
         # Save the credentials for the next run
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
+    # ----------------------------------------------------------
 
     service = build('calendar', 'v3', credentials=creds)
 
@@ -39,7 +66,7 @@ def fetch_calendar_events():
     timeMax = (tomorrow + datetime.timedelta(days=1)).isoformat() + 'T00:00:00Z'
 
     print('Getting the upcoming events for today and tomorrow')
-    events_result = service.events().list(calendarId='primary', timeMin=timeMin,
+    events_result = service.events().list(calendarId='lomvax@gmail.com', timeMin=timeMin,
                                           timeMax=timeMax, singleEvents=True,
                                           orderBy='startTime').execute()
     events = events_result.get('items', [])
@@ -83,18 +110,7 @@ def format_event_time(event_time):
     return formatted_time
 
 
-
 if __name__ == '__main__':
     events_for_email = fetch_calendar_events()
     # Example output
     print(events_for_email)
-
-
-{'today': 
-    [{'summary': 'integrate calendar into personal digest', 
-    'start_time': '2024-03-28T16:00:00+04:00'}, 
-    {'summary': 'meet tatia', 
-    'start_time': '2024-03-28T18:00:00+04:00'}], 
-'tomorrow': 
-    [{'summary': 'daniel sicko bd', 
-    'start_time': 'All Day'}]}

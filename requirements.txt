@@ -1,5 +1,8 @@
-json
 requests
 jinja2
 sendgrid
-datetime
+python-dateutil
+google-auth
+google-auth-oauthlib
+google-api-python-client
+boto3
