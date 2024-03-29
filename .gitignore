@@ -3,3 +3,4 @@ newsapi.env
 gcloud_client_secret.json
 gcloud_service_key.json
 token.json
+user_preferences.json
